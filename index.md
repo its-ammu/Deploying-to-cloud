@@ -229,5 +229,6 @@ To destroy the infrastructure once everything is done
 ```
 terraform destroy
 ```
+<hr />
 
-And Thats it !! 🥳
+<center> And Thats it !! 🥳 </center>
