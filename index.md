@@ -1,8 +1,5 @@
 
-
-🪜 Steps to deploy the Self study platform to cloud 
-
-👩‍💻 Using a simple video streaming application since the project is not finished
+Here are the Steps to deploy the Self study platform to cloud. We will be Using a simple video streaming application since the project is not finished
 
 ## Installation
 
@@ -207,3 +204,30 @@ terraform apply \
 ```
 
 ## Running the container in VM instance
+
+First SSH into the vm instance using the gcp console. Then to configure and authenticate container registry
+
+```
+docker-credential-gcr configure-docker
+```
+To pull the docker image from container registry
+```
+docker pull gcr.io/$(PROJECT_ID)/self-study-platform
+```
+To run the container
+```
+docker run -p 8080:8080 gcr.io/$(PROJECT_ID)/self-study-platform
+```
+Now if we go to the http://EXTERNAL-IP-OF-VM/8080 then we can see the video streaming service
+
+Once done Stop and delete the containers using stop and rm commands
+
+## Destroy Infrastructure
+
+To destroy the infrastructure once everything is done
+
+```
+terraform destroy
+```
+
+And Thats it !! 🥳
