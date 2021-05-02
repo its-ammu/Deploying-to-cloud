@@ -1,4 +1,4 @@
-# Deploying-to-cloud
+
 
 🪜 Steps to deploy the Self study platform to cloud 
 
