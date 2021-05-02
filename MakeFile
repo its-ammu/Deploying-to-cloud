@@ -1,0 +1,18 @@
+PROJECT_ID=self-study-platform
+
+VERSION?=latest
+LOCAL_TAG=self-study:$(VERSION)
+REMOTE_TAG=gcr.io/$(PROJECT_ID)/$(LOCAL_TAG)
+
+CONTAINER_NAME=selfstudy-api
+
+build:
+	docker build ./ -t $(LOCAL_TAG)
+
+run local:
+	docker run -p 3000:3000 $(LOCAL_TAG)
+
+push:
+	docker tag $(LOCAL_TAG) $(REMOTE_TAG)
+	docker push $(REMOTE_TAG)
+
