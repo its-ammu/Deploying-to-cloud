@@ -187,7 +187,7 @@ resource "google_compute_instance" "instance" {
 ```
 Now the tf files are done we will have to create a tfvars file to define the variables -> values.tfvars
 
-```tf
+```tfvars
 app_name="Student-self-study"
 gcp_project_id="self-study-platform"
 gcp_machine_type = "f1-micro"
