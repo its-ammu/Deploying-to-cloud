@@ -59,6 +59,14 @@ To remove stopped container
 ```
 docker container rm <Container id>
 ```
+
+Now we have to push the image to the gcp's container registry
+
+```
+docker tag self-study-platform gcr.io/$(PROJECT_ID)/self-study-platform
+docker push gcr.io/$(PROJECT_ID)/self-study-platform
+```
+
 ## Create infrastructure
 > We are going to create the infrastructure using terraform - a infrastructure as code deployement manager
 
@@ -101,7 +109,101 @@ provider "google" {
   zone        = "us-central1-c"
 }
 ```
-The variables used are declared in variables.tf file
+The variables used are declared in variables.tf file. Add the following to variables.tf
 
+```tf
+variable "app_name" {
+  type = string
+}
 
+variable "gcp_project_id" {
+  type = string
+}
 
+variable "gcp_machine_type" {
+  type = string
+}
+```
+
+I will be using the default network for the VM instance since it is already available it should be specified as data dor resources to be newly created it should be specified as resource -> gcp.tf
+
+```tf
+data "google_compute_network" "default" {
+  name = "default"
+}
+```
+
+Next we will have to create a firewall rule to allow http access to port 8080 -> gcp.tf
+
+```tf
+resource "google_compute_firewall" "allow_http" {
+  name    = "allow-http"
+  network = data.google_compute_network.default.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+
+  target_tags = ["allow-http"]
+}
+```
+
+Then for the OS image and the vm instance -> gcp.tf
+
+```tf
+data "google_compute_image" "cos_image" {
+  family  = "cos-81-lts"
+  project = "cos-cloud"
+}
+
+resource "google_compute_instance" "instance" {
+  name         = "${var.app_name}-vm"
+  machine_type = var.gcp_machine_type
+  zone         = "us-central1-a"
+
+  tags = google_compute_firewall.allow_http.target_tags
+
+  boot_disk {
+    initialize_params {
+      image = data.google_compute_image.cos_image.self_link
+    }
+  }
+
+  network_interface {
+    network = data.google_compute_network.default.name
+
+    access_config {
+      
+    }
+  }
+
+  service_account {
+    scopes = ["storage-ro"]
+  }
+}
+```
+Now the tf files are done we will have to create a tfvars file to define the variables -> values.tfvars
+
+```tf
+app_name="Student-self-study"
+gcp_project_id="self-study-platform"
+gcp_machine_type = "f1-micro"
+```
+The coding part is done. Lets see the execution plan
+
+```
+terraform plan \
+    -var-file= "./values.tfvars" 
+```
+
+Now to deploy the infrastructure to gcp
+
+```
+terraform apply \
+	-var-file= "./values.tfvars" 
+```
+
+## Running the container in VM instance
