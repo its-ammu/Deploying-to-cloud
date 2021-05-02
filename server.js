@@ -3,7 +3,10 @@ const fs = require('fs');
 
 const app = express();
 
-
+app.get("/", function (req, res) {
+    res.sendFile(__dirname + "/index.html");
+  });
+  
 app.get('/video', (req, res) => {
     const range = req.headers.range;
     const videoPath = './videoplayback.mp4';
