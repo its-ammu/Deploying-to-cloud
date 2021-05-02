@@ -231,7 +231,7 @@ terraform destroy
 ```
 <hr />
 
-<center> And That's it you are done! 🥳 </center>
+<center> That's it you are done! 🥳 </center>
 
 
 
