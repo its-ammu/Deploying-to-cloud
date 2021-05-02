@@ -4,15 +4,24 @@ VERSION?=latest
 LOCAL_TAG=self-study:$(VERSION)
 REMOTE_TAG=gcr.io/$(PROJECT_ID)/$(LOCAL_TAG)
 
-CONTAINER_NAME=selfstudy-api
-
 build:
 	docker build ./ -t $(LOCAL_TAG)
 
 run local:
-	docker run -p 3000:3000 $(LOCAL_TAG)
+	docker run -p 8080:8080 $(LOCAL_TAG)
 
 push:
 	docker tag $(LOCAL_TAG) $(REMOTE_TAG)
 	docker push $(REMOTE_TAG)
+
+tf-backend-bucket:
+	gsutil mb -p $(PROJECT_ID) gs://$(PROJECT_ID)-terraform
+
+tf-plan:
+	terraform plan \
+		-var-file= "./values.tfvars" 
+
+tf-apply:
+	terraform apply \
+		-var-file= "./values.tfvars" 
 
