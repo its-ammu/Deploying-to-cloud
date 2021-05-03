@@ -230,10 +230,10 @@ To destroy the infrastructure once everything is done
 terraform destroy
 ```
 <hr />
-<br>
+
 <center> That's it you are done! 🥳 </center>
-<br>
+
 <hr />
 
 
-
+<br>
