@@ -13,9 +13,9 @@
 
 ## Summary
 
-- The app is done and run in our localhost port 3000
-- If it is succesfull it is then its packaged in a container using Docker
+- The app is done and run in our localhost port 8080
+- If it is succesfull then its packaged in a container using Docker
 - The container is then pushed to gcp's Container registry
-- Terraform is used to create OS image, Vm instance
+- Terraform is used to create OS image, Vm instance and a firewall rule
 - Once it is deployed the container is pulled into the vm and is run inside it
 - In the end of the session infrastructure is destroyed 
